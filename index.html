@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>D'TechLab | Repair Code Design</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'tech-bg': '#0a0a0a',
+                        'tech-card': '#121212',
+                        'tech-neon': '#7dbacc',
+                        'tech-dim': '#94a3b8',
+                    },
+                    boxShadow: {
+                        'neon': '0 0 10px rgba(125, 186, 204, 0.3), 0 0 20px rgba(125, 186, 204, 0.1)',
+                        'neon-hover': '0 0 15px rgba(125, 186, 204, 0.6), 0 0 30px rgba(125, 186, 204, 0.3)',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    animation: {
+                        'fade-in-up': 'fadeInUp 0.8s ease-out forwards',
+                    },
+                    keyframes: {
+                        fadeInUp: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Base Reset */
+        html, body {
+            margin: 0;
+            padding: 0;
+            background-color: #0a0a0a;
+        }
+
+        /* --- LÓGICA DE SCROLL HÍBRIDO --- */
+        
+        /* POR DEFECTO (Móvil): Scroll natural para que nada se corte */
+        main {
+            height: auto;
+            overflow-y: visible;
+        }
+        section {
+            min-height: 100vh; /* Ocupa al menos toda la pantalla */
+            height: auto;      /* Pero puede crecer si hay mucho contenido */
+            padding-top: 80px; /* Espacio para el header fijo */
+            padding-bottom: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        /* SOLO EN PC (Pantallas mayores a 768px): Activamos el modo "Presentación" */
+        @media (min-width: 768px) {
+            html, body { height: 100%; overflow: hidden; }
+            main {
+                height: 100vh;
+                overflow-y: scroll;
+                scroll-snap-type: y mandatory; /* El imán */
+                scroll-behavior: smooth;
+            }
+            section {
+                height: 100vh; /* Altura fija perfecta */
+                scroll-snap-align: start;
+                padding-top: 0;
+                padding-bottom: 0;
+            }
+            
+            /* Scrollbar personalizada solo para PC */
+            main::-webkit-scrollbar { width: 6px; }
+            main::-webkit-scrollbar-track { background: #0a0a0a; }
+            main::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
+            main::-webkit-scrollbar-thumb:hover { background: #7dbacc; }
+        }
+
+        /* Clases utilitarias para la animación de entrada (Observer) */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 1s cubic-bezier(0.5, 0, 0, 1); /* Curva muy suave */
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body class="bg-tech-bg text-white font-sans selection:bg-tech-neon selection:text-black">
+
+<header class="fixed top-0 w-full z-50 bg-tech-bg/95 backdrop-blur-md border-b border-white/10 px-6 h-16 md:h-20 flex justify-between items-center transition-all shadow-lg">
+    <a href="#hero" class="block h-full flex items-center">
+        <img src="./assets/Logo.png" alt="D'TechLab Logo" class="h-8 md:h-10 w-auto object-contain hover:opacity-80 transition">
+    </a>
+    
+    <nav class="hidden md:flex items-center gap-8 text-sm uppercase tracking-widest text-tech-dim h-full">
+        <a href="#hero" class="hover:text-tech-neon hover:shadow-neon transition-all duration-300">Inicio</a>
+        <a href="#servicios" class="hover:text-tech-neon hover:shadow-neon transition-all duration-300">Servicios</a>
+        <a href="#antes-despues" class="hover:text-tech-neon hover:shadow-neon transition-all duration-300">Resultados</a>
+        <a href="#contacto" class="hover:text-tech-neon hover:shadow-neon transition-all duration-300 border border-tech-neon px-6 py-2 rounded hover:bg-tech-neon hover:text-black font-bold">
+            Contacto
+        </a>
+    </nav>
+</header>
+
+    <main>
+
+        <section id="hero" class="relative">
+            <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-tech-neon/10 via-tech-bg to-tech-bg"></div>
+            
+            <div class="relative z-10 text-center px-4 max-w-5xl mx-auto flex flex-col items-center justify-center h-full reveal">
+                
+                <img src="./assets/Logo.png" 
+                     alt="D'TechLab - Repair Code Design" 
+                     class="w-3/4 md:w-full max-w-lg md:max-w-2xl h-auto mb-6 md:mb-8 drop-shadow-[0_0_15px_rgba(125,186,204,0.3)]">
+                
+                <h2 class="text-lg md:text-2xl text-tech-dim mb-8 font-light tracking-wide px-2">
+                    SOLUCIONES TÉCNICAS PARA TU PC
+                </h2>
+
+                <div class="flex flex-col md:flex-row gap-4 justify-center w-full px-8 md:px-0">
+                    <a href="#servicios" class="bg-tech-neon text-black font-bold py-3 px-8 rounded hover:bg-white hover:shadow-neon-hover transition-all text-center transform hover:-translate-y-1">
+                        Ver Servicios
+                    </a>
+                    <a href="#contacto" class="border border-white/20 text-white py-3 px-8 rounded hover:border-tech-neon hover:text-tech-neon transition-all text-center">
+                        Consultar Ahora
+                    </a>
+                </div>
+            </div>
+            
+            <div class="absolute bottom-6 md:bottom-10 left-1/2 -translate-x-1/2 animate-bounce text-tech-dim">
+                <i class="ph ph-caret-double-down text-2xl"></i>
+            </div>
+        </section>
+
+        <section id="servicios" class="bg-tech-bg relative z-10">
+            <div class="container mx-auto px-4 reveal">
+                <div class="text-center mb-8 md:mb-16">
+                    <h2 class="text-3xl md:text-5xl font-bold mb-4 mt-8 md:mt-0">
+                        NUESTROS <span class="text-tech-neon drop-shadow-[0_0_10px_rgba(125,186,204,0.5)]">SERVICIOS</span>
+                    </h2>
+                    <p class="text-tech-dim max-w-2xl mx-auto text-sm md:text-base">Soluciones integrales para maximizar la vida útil y el rendimiento de tu equipo.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 max-w-7xl mx-auto pb-8 md:pb-0">
+                    
+                    <div class="group bg-tech-card p-6 md:p-8 rounded-2xl border border-white/5 hover:border-tech-neon hover:shadow-neon hover:scale-105 transition-all duration-300 cursor-default flex flex-col items-center text-center h-full">
+                        <div class="text-5xl md:text-6xl text-tech-neon mb-4 md:mb-6 group-hover:animate-pulse"><i class="ph ph-fan"></i></div>
+                        <h3 class="text-lg md:text-xl font-bold mb-2 md:mb-4 text-white group-hover:text-tech-neon transition-colors">Mantenimiento</h3>
+                        <p class="text-tech-dim text-xs md:text-sm leading-relaxed">Limpieza profunda y cambio de pasta térmica premium.</p>
+                    </div>
+
+                    <div class="group bg-tech-card p-6 md:p-8 rounded-2xl border border-white/5 hover:border-tech-neon hover:shadow-neon hover:scale-105 transition-all duration-300 cursor-default flex flex-col items-center text-center h-full">
+                        <div class="text-5xl md:text-6xl text-tech-neon mb-4 md:mb-6 group-hover:animate-pulse"><i class="ph ph-keyboard"></i></div>
+                        <h3 class="text-lg md:text-xl font-bold mb-2 md:mb-4 text-white group-hover:text-tech-neon transition-colors">Restauración</h3>
+                        <p class="text-tech-dim text-xs md:text-sm leading-relaxed">Limpieza ultrasónica de periféricos y eliminación de bacterias.</p>
+                    </div>
+
+                    <div class="group bg-tech-card p-6 md:p-8 rounded-2xl border border-white/5 hover:border-tech-neon hover:shadow-neon hover:scale-105 transition-all duration-300 cursor-default flex flex-col items-center text-center h-full">
+                        <div class="text-5xl md:text-6xl text-tech-neon mb-4 md:mb-6 group-hover:animate-pulse"><i class="ph ph-desktop-tower"></i></div>
+                        <h3 class="text-lg md:text-xl font-bold mb-2 md:mb-4 text-white group-hover:text-tech-neon transition-colors">Armado de PC</h3>
+                        <p class="text-tech-dim text-xs md:text-sm leading-relaxed">Ensamblaje profesional y gestión de cables impecable.</p>
+                    </div>
+
+                    <div class="group bg-tech-card p-6 md:p-8 rounded-2xl border border-white/5 hover:border-tech-neon hover:shadow-neon hover:scale-105 transition-all duration-300 cursor-default flex flex-col items-center text-center h-full">
+                        <div class="text-5xl md:text-6xl text-tech-neon mb-4 md:mb-6 group-hover:animate-pulse"><i class="ph ph-shopping-cart"></i></div>
+                        <h3 class="text-lg md:text-xl font-bold mb-2 md:mb-4 text-white group-hover:text-tech-neon transition-colors">Asesoramiento</h3>
+                        <p class="text-tech-dim text-xs md:text-sm leading-relaxed">Optimización de presupuesto y guía de compras inteligente.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="antes-despues" class="bg-tech-card relative">
+             <div class="container mx-auto px-4 text-center reveal">
+                <h2 class="text-3xl font-bold mb-8 md:mb-10 mt-8 md:mt-0"><span class="text-tech-neon">ANTES</span> vs <span class="text-tech-neon">DESPUÉS</span></h2>
+                
+                <div class="flex flex-col md:flex-row justify-center items-center gap-6 md:gap-8 max-w-5xl mx-auto pb-8 md:pb-0">
+                    <div class="relative w-full max-w-md group">
+                        <div class="absolute top-2 left-2 bg-red-600 text-white text-xs font-bold px-2 py-1 rounded z-10">SUCIO</div>
+                        <img src="./assets/GPU_Sucio.jpg" alt="Antes" class="rounded-lg border-2 border-red-900 w-full grayscale opacity-70 group-hover:opacity-100 transition shadow-lg">
+                    </div>
+
+                    <div class="text-4xl text-tech-neon animate-pulse rotate-90 md:rotate-0">
+                        <i class="ph ph-arrow-right"></i>
+                    </div>
+
+                    <div class="relative w-full max-w-md group">
+                        <div class="absolute top-2 left-2 bg-tech-neon text-black text-xs font-bold px-2 py-1 rounded z-10">D'TECH LAB</div>
+                        <img src="./assets/GPU_Limpio.jpg" alt="Después" class="rounded-lg border-2 border-tech-neon w-full shadow-neon hover:scale-[1.02] transition-transform">
+                    </div>
+                </div>
+                
+                <p class="mt-4 md:mt-8 text-tech-dim italic text-sm md:text-base">"Hardware en su estado puro"</p>
+            </div>
+        </section>
+
+        <section id="contacto" class="relative">
+            <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom,_var(--tw-gradient-stops))] from-tech-neon/10 via-tech-bg to-tech-bg"></div>
+            
+            <div class="relative z-10 w-full max-w-6xl mx-auto px-6 flex flex-col justify-center h-full reveal">
+                
+                <div class="text-center mb-8 md:mb-12 mt-10 md:mt-0">
+                    <h2 class="text-3xl md:text-4xl font-bold mb-4">Contactános</h2>
+                    <p class="text-lg md:text-xl text-tech-dim">Elige tu canal preferido clickeando aquí:</p>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 mb-12 w-full">
+                    
+                    <a href="https://wa.me/" target="_blank" class="group bg-tech-card p-6 md:p-8 rounded-2xl border border-white/10 hover:border-green-500 hover:shadow-[0_0_20px_rgba(34,197,94,0.3)] transition-all flex flex-col items-center text-center">
+                        <div class="text-4xl md:text-5xl text-green-500 mb-4 group-hover:scale-110 transition-transform">
+                            <i class="ph ph-whatsapp-logo"></i>
+                        </div>
+                        <h3 class="text-lg md:text-xl font-bold text-white mb-2">WhatsApp</h3>
+                        <p class="text-xs md:text-sm text-tech-dim">Deshabilitado Temporalmente.</p>
+                    </a>
+
+                    <a href="https://www.instagram.com/dtechlab.ar/" target="_blank" class="group bg-tech-card p-6 md:p-8 rounded-2xl border border-white/10 hover:border-pink-500 hover:shadow-[0_0_20px_rgba(236,72,153,0.3)] transition-all flex flex-col items-center text-center">
+                        <div class="text-4xl md:text-5xl text-pink-500 mb-4 group-hover:scale-110 transition-transform">
+                            <i class="ph ph-instagram-logo"></i>
+                        </div>
+                        <h3 class="text-lg md:text-xl font-bold text-white mb-2">Instagram</h3>
+                        <p class="text-xs md:text-sm text-tech-dim">@dtechlab.ar.</p>
+                    </a>
+
+                    <a href="mailto:contacto.dtechlab@gmail.com" class="group bg-tech-card p-6 md:p-8 rounded-2xl border border-white/10 hover:border-tech-neon hover:shadow-neon transition-all flex flex-col items-center text-center">
+                        <div class="text-4xl md:text-5xl text-tech-neon mb-4 group-hover:scale-110 transition-transform">
+                            <i class="ph ph-envelope-simple"></i>
+                        </div>
+                        <h3 class="text-lg md:text-xl font-bold text-white mb-2">Email</h3>
+                        <p class="text-xs md:text-sm text-tech-dim">contacto.dtechlab@gmail.com.</p>
+                    </a>
+
+                </div>
+                
+                <footer class="md:absolute bottom-4 left-0 w-full text-center text-xs text-gray-600 pb-8 md:pb-0">
+                    &copy; 2024 D'TechLab. Todos los derechos reservados.
+                </footer>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        // 1. Smooth Scroll para enlaces internos
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // 2. Animación "Soft" al aparecer (Intersection Observer)
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.1 
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.reveal').forEach((el) => {
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>
